@@ -11,7 +11,7 @@ var level;
 var size;
 var cols;
 var rows;
-const VERSION = "v1.0";
+const VERSION = "v1.1";
 function init() {
     $('#version').text(VERSION);
     let board_div = document.querySelector("#board_div");
