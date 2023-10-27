@@ -43,6 +43,8 @@ function changeGame() {
     else
         letters = gamemode;
     setCookie("gamemode", gamemode, 730);
+    level = $("#level").val();
+    setCookie("level", level, 730);
     setup_dw();
     size = $("#size").val();
     setCookie("size", size, 730);
