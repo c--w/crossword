@@ -7,6 +7,7 @@ var seed;
 var startseed;
 var letters;
 var gamemode;
+var level;
 var size;
 var cols;
 var rows;
@@ -21,28 +22,18 @@ function init() {
         });
     $(".key").on("click", handleKeyClick);
     initSeed();
-    if (!gamemode) {// try cookie
-        gamemode = Number(getCookie("gamemode"));
-        size = getCookie("size") || "12*12";
-    }
-    if (isNaN(gamemode)) { // try select
-        gamemode = $("#gamemode").val();
-        size = $("#size").val();
-    }
-    if (gamemode < 4)
-        gamemode = 7;
+    resolve('gamemode', true);
+    resolve('level', true);
+    resolve('size');
+
     [cols, rows] = size.split('*');
-    $("#gamemode").val(gamemode);
-    $("#size").val(size);
-    setCookie("gamemode", gamemode, 730);
-    setCookie("size", size, 730);
     $("#gamemode").on("change", changeGame);
+    $("#level").on("change", changeGame);
     $("#size").on("change", changeGame);
     changeGame();
-    window.onresize = function () {
-        if (gamemode > 7)
-            calculateCSS();
-    }
+    window.addEventListener("resize", function () {
+        calculateCSS();
+    }, false);
 }
 
 function changeGame() {
@@ -84,8 +75,14 @@ function initGame() {
 }
 
 function initKeyboard() {
-    ["Š", "Đ", "Č", "Ć", "Ž", "NJ", "DŽ", "LJ"].forEach(l => $('[l="' + l + '"]').hide());
-    ["Q", "W", "X", 'Y'].forEach(l => $('[l="' + l + '"]').show());
+    if (level == 4) {
+        ["Š", "Đ", "Č", "Ć", "Ž", "NJ", "DŽ", "LJ"].forEach(l => $('[l="' + l + '"]').hide());
+        ["Q", "W", "X", 'Y'].forEach(l => $('[l="' + l + '"]').show());
+    } else {
+        ["Š", "Đ", "Č", "Ć", "Ž", "NJ", "DŽ", "LJ"].forEach(l => $('[l="' + l + '"]').show());
+        ["Q", "W", "X", 'Y'].forEach(l => $('[l="' + l + '"]').hide());
+    }
+    $("#keyboard-div").hide();
 }
 
 var click_time = 0;
@@ -209,8 +206,12 @@ function initSeed() {
 
 var dw;
 function setup_dw() {
-    dw = endict;
+    if (level == 1) dw = hrdict1;
+    else if (level == 2) dw = hrdict2;
+    else if (level == 3) dw = hrdict3;
+    else if (level == 4) dw = endict;
 }
+
 function getRandomWord(length) {
     let filtered = dw.filter((word) => {
         word = cdl(word);
@@ -260,4 +261,28 @@ function updateStats() {
 
 function randomsort(a, b) {
     return Math.random() * 2 - 1;
+}
+
+function resolve(prop, num) {
+    let value = window[prop];
+    if (typeof value == 'undefined') {
+        value = getCookie(prop);
+        if (!value) {
+            value = $('#' + prop).val();
+            window[prop] = value;
+            return;
+        }
+    }
+    let options = $('#' + prop + ' option');
+    let values = $.map(options, function (option) {
+        return option.value;
+    });
+    if (values.indexOf("" + value) == -1) {
+        value = values[0];
+    }
+    if (num)
+        value = Number(value);
+    window[prop] = value;
+    $('#' + prop).val(value);
+    setCookie(prop, value, 730);
 }

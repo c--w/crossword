@@ -48,7 +48,7 @@ function fillCrypto2() {
 
     let divs = $('#board_div div').toArray();
     let ii = 1;
-    words.forEach(w => {
+    words.forEach((w, w_i) => {
         for (let i = 0; i < w.w.length; i++) {
             let div = divs[(w.row + w.v * i) * cols + (w.col + (1 - w.v) * i)];
             div = $(div);
@@ -62,30 +62,63 @@ function fillCrypto2() {
                     rbr = div.data('rbr');
                 }
                 let word = w.w.join('');
-                setTimeout((w, rbr) => {
-
-                    $.ajax({
-                        type: 'GET',
-                        url: 'https://api.dictionaryapi.dev/api/v2/entries/en/' + word,
-                        dataType: 'json',
-                        success: (data) => {
-                            let definition = data[0].meanings[0].definitions[0].definition;
-                            let clue = { rbr: rbr, w: w, def: definition };
-                            clues.push(clue);
-                        },
-                        error: (data) => {
-                            let definition = "Unknown word";
-                            let clue = { rbr: rbr, w: w, def: definition };
-                            clues.push(clue);
-                        }
-                    });
-                }, 10, w, rbr);
+                setTimeout(getClue, 100 + w_i*50, w, rbr);
             }
             div.addClass(rbr + '_' + w.v);
         }
     })
     $("#hints").css("display", "flex");
     fillClues();
+}
+
+async function getClue(w, rbr) {
+    if (level == 4) {
+        $.ajax({
+            type: 'GET',
+            url: 'https://api.dictionaryapi.dev/api/v2/entries/en/' + w.w.join(''),
+            dataType: 'json',
+            success: (data) => {
+                let definition = data[0].meanings[0].definitions[0].definition;
+                let clue = { rbr: rbr, w: w, def: definition };
+                clues.push(clue);
+            },
+            error: (data) => {
+                let definition = "Unknown word";
+                let clue = { rbr: rbr, w: w, def: definition };
+                clues.push(clue);
+            }
+        });
+    } else {
+        let url = 'https://rjecnik.hr/search.php?q=' + w.w.join('');
+        let content = await getUrlContent(url);
+        let html = $(content);
+        let normalas = html.find('.Normala').toArray();
+        let definition = normalas.find(n => n.innerText.trim().length >= 4);
+        let clue;
+        if(!definition) {
+            definition = html.find('.MsoNormal')[0];
+            if(definition) {
+                definition = definition.innerText;
+            } else {
+                definition = 'Nepoznata riječ'; 
+            }
+        } else {
+            definition = definition.innerText.replaceAll(';', '').replaceAll('〉', '').replaceAll(')', '').replaceAll('[', '').trim();
+        }
+        clue = { rbr: rbr, w: w, def: definition };
+        clues.push(clue);
+    }
+}
+
+async function getUrlContent(url) {
+    let content;
+    try {
+        const response = await fetch('https://hpgf.org/grabber_500px.php?url=' + encodeURI(url));
+        content = await response.text();
+    } catch (error) {
+        console.log(error);
+    }
+    return content || '';
 }
 
 function fillClues() {
