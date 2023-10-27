@@ -30,6 +30,10 @@
       <option value="4">Eng. riječi</option>
     </select>
     <select id="size" class="form-select" name="size">
+      <option value="4*4" selected>4*4</option>
+      <option value="4*6" selected>4*6</option>
+      <option value="8*8" selected>8*8</option>
+      <option value="8*8" selected>8*12</option>
       <option value="12*12" selected>12*12</option>
       <option value="12*16" selected>12*16</option>
       <option value="16*12" selected>16*12</option>
@@ -43,12 +47,17 @@
   </div>
   <div id="board_div"></div>
   <div id="clues"></div>
+  <div id="continue">
+    <div class="btn btn-lg btn-primary" onclick="initGame()"><i class="bi bi-forward"></i></div>
+  </div>
   <div id="stats">
     <span>N:</span> <span id="games">0</span>
     <span>T: </span><span id="last">0</span>
     <span>Σ: </span><span id="total">0</span>
     <span>μ: </span><span id="avg"></span>
     <span>min μ (<span id="best-games"></span>):</span><span id="best"></span>
+  </div>
+  <div id="version" onclick="location.reload(true)">
   </div>
   <div id="seed" onclick="share()">
     <i class="bi bi-share"></i>
@@ -110,6 +119,7 @@
   <script src="cookie.js"></script>
   <script src="utils.js"></script>
   <script src="crossword.js"></script>
+  <script src="fireworks.js"></script>  
   <script src="main.js"></script>
 </body>
 

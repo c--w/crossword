@@ -11,7 +11,9 @@ var level;
 var size;
 var cols;
 var rows;
+const VERSION = "v1.0";
 function init() {
+    $('#version').text(VERSION);
     let board_div = document.querySelector("#board_div");
     board_div.onclick = (event) => handleClick(event);    
     $(".key")
@@ -60,6 +62,9 @@ function changeGame() {
 }
 
 function initGame() {
+    stopFireworks();
+    $('#continue').hide();
+
     startseed = seed;
     let seed_url;
     seed_url = gamemode + "-" + "-" + size + startseed;
@@ -93,7 +98,9 @@ function handleClick(event) {
         return false;
     click_time = Date.now();
     let el = $(event.target);
-    if (el.hasClass('l')) {
+    if(el.prop("tagName") != 'DIV')
+        el = el.parent();
+    if (el.hasClass('l') || el.parent().hasClass('l')) {
         effect(el);
         $("#board_div div").removeClass('selected')
         el.addClass('selected');
@@ -134,46 +141,26 @@ function handleKeyClick(event) {
         let key_l = key.data('l');
         selected.text(key_l);
     }
-}
+    if (solved()) {
+        setTimeout(() => {
+            $('#board_div > div.l').addClass('winner2');
+        }, 500)
 
-function isStraight(el) {
-    let len = undo_stack.length;
-    if (len < 2)
-        return true;
-    let dxp = undo_stack_elem[len - 1].data('x') - undo_stack_elem[len - 2].data('x');
-    let dyp = undo_stack_elem[len - 1].data('y') - undo_stack_elem[len - 2].data('y');
-    let dx = el.data('x') - undo_stack_elem[len - 1].data('x');
-    let dy = el.data('y') - undo_stack_elem[len - 1].data('y');
-    if (dxp != dx || dyp != dy)
-        return false;
-    return true;
-}
-
-function isWholeWordSelected(el) {
-    let len = undo_stack.length;
-    if (len < 1)
-        return;
-    let dx = el.data('x') - undo_stack_elem[len - 1].data('x');
-    let dy = el.data('y') - undo_stack_elem[len - 1].data('y');
-    if (!(Math.abs(dx) > 1 && dy == 0 || dx == 0 && Math.abs(dy) > 1 || Math.abs(dx) == Math.abs(dy)))
-        return;
-    dx = Math.sign(dx);
-    dy = Math.sign(dy);
-    let start_x = undo_stack_elem[len - 1].data('x') + dx;
-    let start_y = undo_stack_elem[len - 1].data('y') + dy;
-    let end_x = el.data('x');
-    let end_y = el.data('y');
-    var all_divs = $('.letter').toArray();
-    while (start_x != end_x || start_y != end_y) {
-        let ind = start_y * cols + start_x;
-        let current = $(all_divs[ind]);
-        current.addClass('past-selected');
-        undo_stack.push(current.data('l'));
-        undo_stack_elem.push(current);
-        start_x += dx;
-        start_y += dy;
+        startFireworks();
+        games++;
+        last_time = Math.round((Date.now() - start_time) / 1000);
+        total_time += last_time;
+        $('#continue').show();
     }
 }
+
+function solved() {
+    return !$('#board_div > div.l span.l').toArray().find(span => {
+        return span.innerText != $(span).parent().data('l');
+    })
+}
+
+
 function reset() {
     undo_stack = [];
     undo_stack_elem = [];

@@ -96,11 +96,16 @@ async function getClue(w, rbr) {
         let definition = normalas.find(n => n.innerText.trim().length >= 4);
         let clue;
         if(!definition) {
-            definition = html.find('.MsoNormal')[0];
+            definition = html.find('.word-link')[0];
             if(definition) {
                 definition = definition.innerText;
             } else {
-                definition = 'Nepoznata riječ'; 
+                definition = html.find('.MsoNormal')[0];
+                if(definition) {
+                    definition = definition.innerText;
+                } else {
+                    definition = 'Nepoznata riječ'; 
+                }
             }
         } else {
             definition = definition.innerText.replaceAll(';', '').replaceAll('〉', '').replaceAll(')', '').replaceAll('[', '').trim();
@@ -326,17 +331,6 @@ function createGrid() {
     let grid = new Array(rows); //create 2 dimensional array for letter grid
     for (let i = 0; i < rows; i++) {
         grid[i] = new Array(cols);
-    }
-    return grid;
-}
-
-function cloneGrid(g) {
-    let grid = new Array(rows); //create 2 dimensional array for letter grid
-    for (let i = 0; i < rows; i++) {
-        grid[i] = new Array(cols);
-        for (let j = 0; j < cols; j++) {
-            grid[i][j] = g[i][j] || '';
-        }
     }
     return grid;
 }
