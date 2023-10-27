@@ -74,6 +74,7 @@ function initGame() {
     $("#seed").attr('title', startseed);
     $('#loading').css('display', 'flex');
     $('#board_div').empty();
+    $('#clues').empty();
     setTimeout(() => {
         fillCrypto();
     })

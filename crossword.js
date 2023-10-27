@@ -104,7 +104,7 @@ async function getClue(w, rbr) {
                 if(definition) {
                     definition = definition.innerText;
                 } else {
-                    definition = 'Nepoznata riječ'; 
+                    definition =  w.w.join(''); 
                 }
             }
         } else {
