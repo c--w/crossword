@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Crossword</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="manifest" href="manifest.json">
+  <link href="bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+  <div id="menu" class="input-group">
+    <select id="gamemode" class="form-select" name="gamemode">
+      <option value="4">4 letters</option>
+      <option value="5">up to 5 letters</option>
+      <option value="6">up to 6 letters</option>
+      <option value="7" selected>up to 7 letters</option>
+    </select>
+    <select id="size" class="form-select" name="size">
+      <option value="12*12" selected>12*12</option>
+      <option value="12*16" selected>12*16</option>
+      <option value="16*12" selected>16*12</option>
+      <option value="16*16" selected>16*16</option>
+    </select>
+  </div>
+  <div id="loading">
+    <div class="spinner-border text-success" role="status">
+      <span class="sr-only"></span>
+    </div>
+  </div>
+  <div id="board_div"></div>
+  <div id="clues"></div>
+  <div id="stats">
+    <span>N:</span> <span id="games">0</span>
+    <span>T: </span><span id="last">0</span>
+    <span>Σ: </span><span id="total">0</span>
+    <span>μ: </span><span id="avg"></span>
+    <span>min μ (<span id="best-games"></span>):</span><span id="best"></span>
+  </div>
+  <div id="seed" onclick="share()">
+    <i class="bi bi-share"></i>
+  </div>
+  <input id="share-url" type="text">
+
+  <div id="keyboard-div">
+    <div class="keyboard">
+      <div class="key-row">
+        <button class="key">Q</button>
+        <button class="key">W</button>
+        <button class="key">E</button>
+        <button class="key">R</button>
+        <button class="key">T</button>
+        <button class="key">Z</button>
+        <button class="key">U</button>
+        <button class="key">I</button>
+        <button class="key">O</button>
+        <button class="key">P</button>
+        <button class="key">Š</button>
+        <button class="key">Đ</button>
+        <button class="key">DŽ</button>
+      </div>
+      <div class="key-row">
+        <button class="key">A</button>
+        <button class="key">S</button>
+        <button class="key">D</button>
+        <button class="key">F</button>
+        <button class="key">G</button>
+        <button class="key">H</button>
+        <button class="key">J</button>
+        <button class="key">K</button>
+        <button class="key">L</button>
+        <button class="key">Č</button>
+        <button class="key">Ć</button>
+      </div>
+      <div class="key-row">
+        <button class="key">Y</button>
+        <button class="key">X</button>
+        <button class="key">C</button>
+        <button class="key">V</button>
+        <button class="key">B</button>
+        <button class="key">N</button>
+        <button class="key">M</button>
+        <button class="key">NJ</button>
+        <button class="key">LJ</button>
+        <button class="key">Ž</button>
+        <button class="key del"><i class="bi bi-backspace key del"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="jquery-3.6.4.min.js"></script>
+  <script src="bootstrap.min.js"></script>
+  <script src="endict.js"></script>
+  <script src="cookie.js"></script>
+  <script src="utils.js"></script>
+  <script src="crossword.js"></script>
+  <script src="main.js"></script>
+</body>
+
+</html>

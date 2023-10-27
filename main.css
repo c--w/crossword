@@ -1,0 +1,247 @@
+@import url("bootstrap-icons.css");
+
+html {
+    font-size: min(4vmin, 24px);
+}
+
+:root {
+    --border-light-color: #ccc;
+    --main-box-margin: 2px;
+    --inner-box-margin: 1px;
+    --box-border-width: 2px;
+}
+
+:root {
+    --green: #6aaa64;
+    --darkendGreen: #538d4e;
+    --yellow: #c9b458;
+    --darkendYellow: #b59f3b;
+    --lightGray: #d8d8d8;
+    --gray: #86888a;
+    --darkGray: #939598;
+    --white: #fff;
+    --black: #212121;
+    --orange: #f5793a;
+    --blue: #85c0f9;
+    --color-tone-1: #1a1a1b;
+    --color-tone-2: #787c7e;
+    --color-tone-3: #878a8c;
+    --color-tone-4: #d3d6da;
+    --color-tone-5: #edeff1;
+    --color-tone-6: #f6f7f8;
+    --color-tone-7: #ffffff;
+    --color-present: var(--yellow);
+    --color-correct: var(--green);
+    --color-absent: var(--color-tone-2);
+    --tile-text-color: var(--color-tone-7);
+    --key-text-color: var(--color-tone-1);
+    --key-evaluated-text-color: var(--color-tone-7);
+    --key-bg: var(--color-tone-4);
+    --key-bg-present: var(--color-present);
+    --key-bg-correct: var(--color-correct);
+    --key-bg-absent: var(--color-absent);
+    --key-bg-active: var(--blue);
+    --color-background: var(--color-tone-7);
+    --color-background-t: #ffffffaa;
+    --factor: 1;
+    font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+}
+
+* {
+    transition: all .3s ease-out;
+    transition: transform .8s ease-out;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    font-weight: 900;
+    color: #444444;
+    background-color: beige;
+    background-attachment: fixed;
+}
+
+#menu {
+    align-self: center;
+    width: auto;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.selected {
+    background-color: var(--green);
+    transition: all 0.1s cubic-bezier(0.5, -0.5, 0.5, 2);
+}
+
+.effect {
+    background-color: gray;
+    transition: all 0.1s cubic-bezier(0.5, -0.5, 0.5, 2);
+}
+
+#loading {
+    display: none;
+    justify-content: center;
+    margin-top: 2vh;
+}
+
+#board_div {
+    margin-top: 2vh;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(1, min(6vw, 40px));
+    grid-template-rows: repeat(1, min(6vw, 40px));
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+#board_div div {
+    margin: 0;
+    color: #555;
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bold;
+    transition: color 1.5s;
+    border: 0;
+    display: grid;
+    justify-content: left;
+    align-content: start;    
+    position: relative;
+    font-size: x-small;
+    border: 1px solid #555;
+    outline: 1px solid #555;
+    padding-left: 2px;
+}
+#board_div div.l, #board_div div.b {
+    justify-content: center;
+    align-content: center;
+    font-size: inherit;
+    padding-left: 0px;
+}
+#board_div div span.rbr {
+    position: absolute;
+    top:0;
+    left:5%;
+    font-size:x-small;
+}
+
+#clues {
+    z-index: 1;
+}
+#clues div {
+    margin: 1vmin;
+    padding: 1vmin;
+    background-color: #eee;
+}
+
+#stats {
+    font-size: min(3vmin, 18px);
+    font-weight: 400;
+    position: fixed;
+    bottom: 1.5vmax;
+    left: 1.5vmax;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 2vmin;
+    grid-row-gap: 0;
+    max-width: 25%;
+}
+
+#stats span:nth-child(even) {
+    text-align: end;
+}
+
+#seed {
+    font-weight: 400;
+    font-size: min(2.5vmax, 24px);
+    position: fixed;
+    bottom: 1.5vmax;
+    right: 1.5vmax;
+    cursor: pointer;
+    color: dodgerblue;
+}
+
+#share-url {
+    position: absolute;
+    top: -1000px;
+}
+
+#keyboard-div {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    position: absolute;
+    transition: 0s;
+    top: 50%;
+    left: 0;
+}
+
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--color-background-t);
+}
+
+.key-row {
+    display: flex;
+    flex-grow: 1;
+}
+
+button.key {
+    color: var(--key-text-color);
+    padding: 5px;
+    margin: 2px;
+    border: 0;
+    background-color: #eee;
+    transition: background-color 0.1s linear;
+    touch-action: manipulation;
+    position: relative;
+    font-size: larger;
+    min-width: 24px;
+    border-radius: 6px;
+}
+
+.del,
+.enter {
+    background-color: var(--color-tone-5);
+}
+
+.key-div {
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    right: 0;
+    background-color: var(--color-tone-6);
+    transition: background-color 0.2s linear, top 0.2s ease-out,
+        bottom 0.2s ease-out;
+}
+
+.key-bckg-div {
+    position: absolute;
+    z-index: -2;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: var(--color-tone-6);
+}
+
+.key.pressed {
+    background-color: var(--color-tone-7);
+}
+
+@media (max-width: 560px) {
+    .key {
+        min-width: 4vw;
+        margin: 0.4vw;
+    }
+}
